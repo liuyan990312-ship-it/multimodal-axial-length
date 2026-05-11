@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Multimodal Axial Length Prediction System</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <header class="masthead">
+        <div class="masthead-copy">
+          <p class="eyebrow">Static research demonstration</p>
+          <h1>Multimodal Axial Length Prediction System</h1>
+          <p class="lead">
+            Deidentified demonstration of postoperative axial length forecasting from structured biometry, clinical text embeddings and ophthalmic image embeddings.
+          </p>
+          <div class="workflow" aria-label="Multimodal workflow">
+            <span>Structured</span>
+            <span>Clinical text</span>
+            <span>Ophthalmic image</span>
+            <strong>Fused trajectory</strong>
+          </div>
+        </div>
+        <div class="logo-panel" aria-label="Institutional logo">
+          <img src="assets/logo.jpg" alt="Institutional logo" />
+        </div>
+      </header>
+
+      <section class="workspace">
+        <aside class="panel query-panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Query</p>
+              <h2>Deidentified eye state</h2>
+            </div>
+            <span id="statusBadge" class="badge">Static</span>
+          </div>
+
+          <div class="block">
+            <div class="block-title">
+              <span>Case library</span>
+              <strong>Anonymous demo eyes</strong>
+            </div>
+            <div id="caseRail" class="case-rail"></div>
+            <p id="caseSummary" class="case-summary">--</p>
+          </div>
+
+          <div class="block">
+            <div class="block-title">
+              <span>Structured branch</span>
+              <strong>Clinical query</strong>
+            </div>
+            <div class="input-grid">
+              <label class="field">
+                <span>Preoperative age, years</span>
+                <input id="ageInput" type="number" min="0.1" max="90" step="0.01" value="6.20" />
+              </label>
+              <label class="field">
+                <span>Baseline axial length, mm</span>
+                <input id="baseInput" type="number" min="10" max="45" step="0.01" value="24.10" />
+              </label>
+            </div>
+            <label class="field full">
+              <span>Multimodal phenotype</span>
+              <select id="profileInput"></select>
+            </label>
+            <label class="field full">
+              <span>Target horizon, years</span>
+              <input id="focusInput" type="number" min="0" max="5" step="0.01" value="5.00" />
+            </label>
+            <input id="focusRange" class="range" type="range" min="0" max="5" step="0.01" value="5.00" />
+          </div>
+
+          <button id="predictButton" type="button">Update forecast</button>
+
+          <div class="result-grid">
+            <div><span>Target AL</span><strong id="focusValue">--</strong></div>
+            <div><span>5-year AL</span><strong id="al5y">--</strong></div>
+            <div><span>5-year growth</span><strong id="growthValue">--</strong></div>
+            <div><span>Annual rate</span><strong id="annualGrowth">--</strong></div>
+          </div>
+        </aside>
+
+        <section class="panel forecast-panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Forecast</p>
+              <h2>Postoperative axial length trajectory</h2>
+              <p id="chartSubtitle" class="subtle">--</p>
+            </div>
+            <div class="legend">
+              <span><i class="fusion"></i>Fused</span>
+              <span><i class="structured"></i>Structured</span>
+              <span><i class="multimodal"></i>Multimodal</span>
+              <span><i class="prior"></i>Curve prior</span>
+            </div>
+          </div>
+          <svg id="trajectoryChart" class="chart" role="img" aria-label="Predicted axial length trajectory"></svg>
+          <div class="output-strip">
+            <div><span>Year 1</span><strong id="al1y">--</strong></div>
+            <div><span>Year 3</span><strong id="al3y">--</strong></div>
+            <div><span>Year 5</span><strong id="al5yStrip">--</strong></div>
+            <div><span>Phenotype</span><strong id="phenotypeLabel">--</strong></div>
+          </div>
+        </section>
+
+        <section class="panel evidence-panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Evidence</p>
+              <h2>Image and embedding inputs</h2>
+            </div>
+            <span id="caseLabel" class="badge">--</span>
+          </div>
+          <div class="view-tabs">
+            <button class="view-button active" type="button" data-view="image">Image</button>
+            <button class="view-button" type="button" data-view="heatmap">Heatmap</button>
+            <button class="view-button" type="button" data-view="overlay">Overlay</button>
+          </div>
+          <div id="imageStage" class="image-stage image-mode">
+            <img id="baseImage" alt="Deidentified ophthalmic image" />
+            <div id="cleanHeatmap" class="clean-heatmap" aria-hidden="true"></div>
+            <div class="heat-scale"><span></span><span></span><span></span></div>
+          </div>
+          <p id="imageCaption" class="image-caption">--</p>
+          <div id="caseEvidence" class="chips"></div>
+          <div class="source-grid">
+            <div><span>Structured variables</span><strong>3</strong></div>
+            <div><span>Text embeddings</span><strong>6 types</strong></div>
+            <div><span>Image embeddings</span><strong>3 types</strong></div>
+          </div>
+        </section>
+      </section>
+
+      <section class="analytics">
+        <section class="panel">
+          <div class="panel-head compact">
+            <div>
+              <p class="eyebrow">Fusion</p>
+              <h2>Modality contribution</h2>
+            </div>
+          </div>
+          <div id="modalityBars" class="modality-bars"></div>
+          <svg id="fusionSchematic" class="schematic" role="img" aria-label="Fusion schematic"></svg>
+        </section>
+
+        <section class="panel token-panel">
+          <div class="panel-head compact">
+            <div>
+              <p class="eyebrow">Tokens</p>
+              <h2>Case-level contribution map</h2>
+            </div>
+          </div>
+          <div id="tokenBars" class="token-bars"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head compact">
+            <div>
+              <p class="eyebrow">Validation</p>
+              <h2>Manuscript-aligned summary</h2>
+            </div>
+          </div>
+          <div class="score-grid">
+            <div><span>Endpoint</span><strong>Postoperative AL</strong></div>
+            <div><span>Prospective R2</span><strong>0.859</strong></div>
+            <div><span>Mean bias</span><strong>0.121 mm</strong></div>
+            <div><span>Within 0.5 mm</span><strong>80.0%</strong></div>
+          </div>
+          <div class="method-stack">
+            <span>Observation-level horizons</span>
+            <span>Curve-informed prior</span>
+            <span>Stage-wise linear fusion</span>
+          </div>
+        </section>
+      </section>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>
